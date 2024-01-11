@@ -1,6 +1,7 @@
 import pandas as pd
 import configparser
 import mysql.connector
+import psycopg2
 from mysql.connector import Error
 
 def get_tables(path):
@@ -18,11 +19,18 @@ def read_db_config(filename='config.ini', section='mssql'):
     else:
         raise Exception(f'Section {section} not found in the {filename} file')
     return db_config
-def get_mysql_connection(db_config_mysql):
+def get_database_connection(db_config,db_type):
     try:
-        connection_mysql = mysql.connector.connect(**db_config_mysql)
-        print('Connection Successfully Granted')
+        if db_type == "mysql":
+            connection = mysql.connector.connect(**db_config)
+            print('MySQL Connection Successfully Granted')
+        elif db_type == "postgresql":
+            connection = psycopg2.connect(**db_config)
+            print('PostgreSQL Connection Successfully Granted')
+        else:
+            print('Unsupported Database Type')
+            return None
     except Error as e:
         print(f'Error: {e}')
         return None
-    return connection_mysql
+    return connection

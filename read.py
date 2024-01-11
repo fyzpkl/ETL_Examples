@@ -1,7 +1,7 @@
 from util import *
 def read_table(table_name,limit=0):
     db_config = read_db_config('config.ini', 'mysql')
-    connection = get_mysql_connection(db_config)
+    connection = get_database_connection(db_config, 'mysql')
     cursor = connection.cursor()
     if limit == 0:
         query = f'Select * From {table_name}'
